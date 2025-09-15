@@ -24,7 +24,12 @@ class BookListView(TemplateView):
   
   def get_context_data(self, **kwargs):
     context = super().get_context_data(**kwargs)
-    context['books'] = Book.objects.all().order_by('-created_at')
+
+    genre = self.request.GET.get('genre')
+    if genre:
+      context['books'] = Book.objects.filter(genre=genre).order_by('-created_at')
+    else:
+      context['books'] = Book.objects.all().order_by('-created_at')
     return context
 
 class BookDetailView(TemplateView):
